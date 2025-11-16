@@ -74,7 +74,22 @@ void test_convex_hull()
                 pileCenters.append(My2d23d(pt2d)); // store as 3D point (Z=0)
             }
         }
+		else if (pEnt->isKindOf(AcDbLine::desc()))
+		{
+			// Use both endpoints of the line.
+			AcDbLine* pLine = AcDbLine::cast(pEnt);
+			AcGePoint3d spt = pLine->startPoint();
+			AcGePoint3d ept = pLine->endPoint();
 
+			pileCenters.append(spt);
+			pileCenters.append(ept);
+		}
+		else if (pEnt->isKindOf(AcDbPoint::desc()))
+		{
+			// Use the position of the dbpoint.
+			AcDbPoint* pPt = AcDbPoint::cast(pEnt);
+			pileCenters.append(pPt->position());
+		}
         pEnt->close();
     }
 
